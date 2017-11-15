@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Hello world</title>
+   </head>
+   <script src = "/socket.io/socket.io.js"></script>
+    <script
+            src="https://code.jquery.com/jquery-3.2.1.min.js"
+			integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+			crossorigin="anonymous"></script>
+   <script>
+       var roomName = "";
+       var socket = io.connect('http://192.168.0.100:3000');
+    
+      socket.on('connectStatus', function(data){
+          $("#body").html(data.message);
+      });
+       
+      socket.on('roomBroadcast', function(data){
+          $("#console").append('<p>'+JSON.stringify(data.emitData)+'</p>');
+      });
+       
+      $(document).ready(function(){
+          $("#connectToRoom").on("click",function(e){
+              roomName = $("#roomName").val();
+            socket.emit("connectToRoom",{roomName:$("#roomName").val()});
+          });
+          
+          $("#emitToRoom").on("click",function(e){
+            socket.emit("emitToRoom",{username:$("#username").val(),room:roomName,emitData:{text:$("#emitContent").val()}});
+          });
+          
+          $("#leaveFromRoom").on("click",function(e){
+              socket.emit('leaveFromRoom',{room:roomName,username:$("#username").val()});
+          });
+          
+      });
+       
+       
+   </script>
+   <body>
+       <h2>Welcome To SocketTester</h2>
+       <div>
+           <input id="username" placeholder="Enter Name" type="text"/> 
+           <input id="roomName" placeholder="Enter Room Name" type="text"/> 
+           <button id="connectToRoom">Connect To</button>
+       </div>
+       <div>
+           <input id="emitContent" type="text"/> 
+           <button id="emitToRoom">Emit To</button>
+       </div>
+       <div>
+           <button id="leaveFromRoom">Disconnect From Room</button>
+       </div>
+       <p id="body"></p>
+       <div id="console"></div>
+    </body>
+</html>
