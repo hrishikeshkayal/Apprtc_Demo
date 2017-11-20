@@ -10,14 +10,14 @@
 			crossorigin="anonymous"></script>
    <script>
        var roomName = "";
-       var socket = io.connect('http://192.168.0.100:3000');
+       var socket = io.connect('http://192.168.0.103:3000');
     
       socket.on('connectStatus', function(data){
           $("#body").html(data.message);
       });
        
       socket.on('roomBroadcast', function(data){
-          $("#console").append('<p>'+JSON.stringify(data.emitData)+'</p>');
+          $("#console").append('<p>'+JSON.stringify(data)+'</p><hr/>');
       });
        
       $(document).ready(function(){
@@ -32,6 +32,10 @@
           
           $("#leaveFromRoom").on("click",function(e){
               socket.emit('leaveFromRoom',{room:roomName,username:$("#username").val()});
+          });
+          
+          $("#clearLog").on("click",function(e){
+              $("#console").html("");
           });
           
       });
@@ -51,8 +55,11 @@
        </div>
        <div>
            <button id="leaveFromRoom">Disconnect From Room</button>
+           <button id="clearLog">Clear Log</button>
        </div>
        <p id="body"></p>
-       <div id="console"></div>
+       <div style="height:500px; width:100%; overflow: auto; background: #000; color: darkgreen;">
+            <div id="console"></div>
+       </div>
     </body>
 </html>
