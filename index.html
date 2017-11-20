@@ -10,7 +10,7 @@
 			crossorigin="anonymous"></script>
    <script>
        var roomName = "";
-       var socket = io.connect('http://192.168.0.103:3000');
+       var socket = io.connect('http://192.168.0.103:5000');
     
       socket.on('connectStatus', function(data){
           $("#body").html(data.message);
